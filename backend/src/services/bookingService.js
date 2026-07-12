@@ -29,15 +29,17 @@ const getBookingById = (id) => {
     return bookings.find(booking => booking.id === id);
 };
 
-const createBooking = (bookingData) => {
-    const newBooking = {
-        id: bookings.length + 1,
-        ...bookingData
-    };
+const createBooking = async (bookingData) => {
+    const { customer, service, date, time } = bookingData;
 
-    bookings.push(newBooking);
+    const result = await pool.query(
+        `INSERT INTO bookings (customer, service, date, time)
+         VALUES ($1, $2, $3, $4)
+         RETURNING *`,
+        [customer, service, date, time]
+    );
 
-    return newBooking;
+    return result.rows[0];
 };
 
 const updateBooking = (id, bookingData) => {

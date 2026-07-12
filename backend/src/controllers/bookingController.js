@@ -30,13 +30,20 @@ const getBookingByIdController = (req, res) => {
     res.json(booking);
 };
 
-const createBookingController = (req, res) => {
-    const booking = createBooking(req.body);
+const createBookingController = async (req, res) => {
+    try {
+        const booking = await createBooking(req.body);
 
-    res.status(201).json({
-        message: "Booking created successfully!",
-        booking
-    });
+        res.status(201).json({
+            message: "Booking created successfully!",
+            booking
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
 };
 
 const updateBookingController = (req, res) => {

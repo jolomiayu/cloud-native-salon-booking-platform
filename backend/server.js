@@ -15,5 +15,5 @@ app.get("/", (req, res) => {
 app.use("/api/bookings", bookingRoutes);
 
 app.listen(PORT, () => {
-    console.log('Server running on port ${PORT}');
+    console.log(`Server running on port ${PORT}`);
 });

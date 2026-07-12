@@ -6,9 +6,16 @@ const {
     deleteBooking
 } = require("../services/bookingService");
 
-
-const getBookings = (req, res) => {
-    res.json(getAllBookings());
+const getBookings = async (req, res) => {
+    try {
+        const bookings = await getAllBookings();
+        res.json(bookings);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
 };
 
 const getBookingByIdController = (req, res) => {

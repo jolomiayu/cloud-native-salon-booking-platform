@@ -1,3 +1,5 @@
+const pool = require("../config/db");
+
 const bookings = [
     {
         id: 1,
@@ -15,7 +17,13 @@ const bookings = [
     }
 ];
 
-const getAllBookings = () => bookings;
+const getAllBookings = async () => {
+    const result = await pool.query(
+        "SELECT * FROM bookings ORDER BY id"
+    );
+
+    return result.rows;
+};
 
 const getBookingById = (id) => {
     return bookings.find(booking => booking.id === id);

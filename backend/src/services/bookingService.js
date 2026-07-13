@@ -19,20 +19,20 @@ const getBookingById = async (id) => {
 };
 
 const createBooking = async (bookingData) => {
-    const { customer, service, date, time } = bookingData;
+    const { customer, service, booking_date, booking_time } = bookingData;
 
     const result = await pool.query(
-        `INSERT INTO bookings (customer, service, date, time)
+        `INSERT INTO bookings (customer, service, booking_date, booking_time)
          VALUES ($1, $2, $3, $4)
          RETURNING *`,
-        [customer, service, date, time]
+        [customer, service, booking_date, booking_time]
     );
 
     return result.rows[0];
 };
 
 const updateBooking = async (id, bookingData) => {
-    const { customer, service, date, time } = bookingData;
+    const { customer, service, booking_date, booking_time } = bookingData;
 
     const result = await pool.query(
         `UPDATE bookings
@@ -42,7 +42,7 @@ const updateBooking = async (id, bookingData) => {
              booking_time = $4
          WHERE id = $5
          RETURNING *`,
-        [customer, service, date, time, id]
+        [customer, service, booking_date, booking_time, id]
     );
 
     return result.rows[0];

@@ -1,21 +1,5 @@
 const pool = require("../config/db");
 
-const bookings = [
-    {
-        id: 1,
-        customer: "Jolomi",
-        service: "Hair Styling",
-        date: "2026-07-12",
-        time: "10:00 AM"
-    },
-    {
-        id: 2,
-        customer: "Sarah",
-        service: "Nail Care",
-        date: "2026-07-12",
-        time: "2:00 PM"
-    }
-];
 
 const getAllBookings = async () => {
     const result = await pool.query(
@@ -25,8 +9,13 @@ const getAllBookings = async () => {
     return result.rows;
 };
 
-const getBookingById = (id) => {
-    return bookings.find(booking => booking.id === id);
+const getBookingById = async (id) => {
+    const result = await pool.query(
+        "SELECT * FROM bookings WHERE id = $1",
+        [id]
+    );
+
+    return result.rows[0];
 };
 
 const createBooking = async (bookingData) => {
@@ -42,30 +31,33 @@ const createBooking = async (bookingData) => {
     return result.rows[0];
 };
 
-const updateBooking = (id, bookingData) => {
-    const booking = bookings.find(b => b.id === id);
+const updateBooking = async (id, bookingData) => {
+    const { customer, service, date, time } = bookingData;
 
-    if (!booking) {
-        return null;
-    }
+    const result = await pool.query(
+        `UPDATE bookings
+         SET customer = $1,
+             service = $2,
+             booking_date = $3,
+             booking_time = $4
+         WHERE id = $5
+         RETURNING *`,
+        [customer, service, date, time, id]
+    );
 
-    Object.assign(booking, bookingData);
-
-    return booking;
+    return result.rows[0];
 };
 
-const deleteBooking = (id) => {
-    const index = bookings.findIndex(b => b.id === id);
+const deleteBooking = async (id) => {
+    const result = await pool.query(
+        "DELETE FROM bookings WHERE id = $1 RETURNING *",
+        [id]
+    );
 
-    if (index === -1) {
-        return null;
-    }
-
-    return bookings.splice(index, 1)[0];
+    return result.rows[0];
 };
 
 module.exports = {
-    bookings,
     getAllBookings,
     getBookingById,
     createBooking,

@@ -1,3 +1,5 @@
+const authorizeRole = require("../auth/authorizeRole");
+
 const bookingValidation = require("../middlewares/bookingValidation");
 
 const authenticateToken = require("../auth/authMiddleware");
@@ -21,6 +23,11 @@ router.post("/", authenticateToken, bookingValidation, createBooking);
 
 router.put("/:id", authenticateToken, updateBooking);
 
-router.delete("/:id", authenticateToken, deleteBooking);
+router.delete(
+    "/:id",
+    authenticateToken,
+    authorizeRole("admin"),
+    deleteBooking
+);
 
 module.exports = router;

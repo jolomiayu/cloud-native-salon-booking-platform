@@ -8,7 +8,7 @@ const {
 
 const getBookings = async (req, res) => {
     try {
-        const bookings = await getAllBookings();
+        const bookings = await getAllBookings(req.user);
         res.json(bookings);
     } catch (error) {
         console.error(error);
@@ -39,7 +39,7 @@ const getBookingByIdController = async (req, res) => {
 
 const createBookingController = async (req, res) => {
     try {
-        const booking = await createBooking(req.body);
+        const booking = await createBooking(req.body, req.user.id);
 
         res.status(201).json({
             message: "Booking created successfully!",

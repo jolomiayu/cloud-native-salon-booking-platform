@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     service VARCHAR(100) NOT NULL,
     booking_date DATE NOT NULL,
     booking_time TIME NOT NULL
+    user_id INTEGER REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS users (

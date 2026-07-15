@@ -15,7 +15,11 @@ const {
     deleteBooking
 } = require("../controllers/bookingController");
 
-router.get("/", getBookings);
+router.get(
+    "/",
+    authenticateToken,
+    getBookings
+);
 
 router.get("/:id", getBookingById);
 

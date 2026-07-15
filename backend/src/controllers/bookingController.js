@@ -1,8 +1,10 @@
 const {
     getAllBookings,
     getBookingById,
+    getBookingOwner,
     createBooking,
     updateBooking,
+    updateBookingStatus,
     deleteBooking
 } = require("../services/bookingService");
 
@@ -55,6 +57,25 @@ const createBookingController = async (req, res) => {
 
 const updateBookingController = async (req, res) => {
     try {
+        const owner = await getBookingOwner(
+            parseInt(req.params.id)
+        );
+        
+        if (!owner) {
+            return res.status(404).json({
+                message: "Booking not found"
+            });
+        }
+        
+        if (
+            req.user.role !== "admin" &&
+            owner.user_id !== req.user.id
+        ) {
+            return res.status(403).json({
+                message: "Access denied."
+            });
+        }
+
         const booking = await updateBooking(
             parseInt(req.params.id),
             req.body
@@ -70,6 +91,47 @@ const updateBookingController = async (req, res) => {
             message: "Booking updated successfully!",
             booking
         });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+};
+
+const updateBookingStatusController = async (req, res) => {
+    try {
+        const { status } = req.body;
+
+        const allowedStatuses = [
+            "pending",
+            "confirmed",
+            "completed",
+            "cancelled"
+        ];
+
+        if (!allowedStatuses.includes(status)) {
+            return res.status(400).json({
+                message: "Invalid status"
+            });
+        }
+
+        const booking = await updateBookingStatus(
+            parseInt(req.params.id),
+            status
+        );
+
+        if (!booking) {
+            return res.status(404).json({
+                message: "Booking not found"
+            });
+        }
+
+        res.json({
+            message: "Booking status updated successfully!",
+            booking
+        });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({
@@ -105,6 +167,7 @@ module.exports = {
     getBookingById: getBookingByIdController,
     createBooking: createBookingController,
     updateBooking: updateBookingController,
+    updateBookingStatus: updateBookingStatusController,
     deleteBooking: deleteBookingController
 };
 

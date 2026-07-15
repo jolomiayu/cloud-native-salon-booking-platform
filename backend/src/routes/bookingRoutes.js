@@ -12,6 +12,7 @@ const {
     getBookingById,
     createBooking,
     updateBooking,
+    updateBookingStatus,
     deleteBooking
 } = require("../controllers/bookingController");
 
@@ -26,6 +27,13 @@ router.get("/:id", getBookingById);
 router.post("/", authenticateToken, bookingValidation, createBooking);
 
 router.put("/:id", authenticateToken, updateBooking);
+
+router.patch(
+    "/:id/status",
+    authenticateToken,
+    authorizeRole("admin"),
+    updateBookingStatus
+);
 
 router.delete(
     "/:id",

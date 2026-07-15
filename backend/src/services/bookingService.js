@@ -32,13 +32,29 @@ const getBookingById = async (id) => {
     return result.rows[0];
 };
 
+const getBookingOwner = async (id) => {
+    const result = await pool.query(
+        "SELECT user_id FROM bookings WHERE id = $1",
+        [id]
+    );
+
+    return result.rows[0];
+};
+
 const createBooking = async (bookingData, userId) => {
     const { customer, service, booking_date, booking_time } = bookingData;
 
     const result = await pool.query(
-        `INSERT INTO bookings (customer, service, booking_date, booking_time, user_id )
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING *`,
+        `INSERT INTO bookings (
+            customer,
+            service,
+            booking_date,
+            booking_time,
+            user_id,
+            status
+        )
+        VALUES ($1, $2, $3, $4, $5, 'pending')
+        RETURNING *`,
         [customer, service, booking_date, booking_time, userId]
     );
 
@@ -62,6 +78,19 @@ const updateBooking = async (id, bookingData) => {
     return result.rows[0];
 };
 
+const updateBookingStatus = async (id, status) => {
+
+    const result = await pool.query(
+        `UPDATE bookings
+         SET status = $1
+         WHERE id = $2
+         RETURNING *`,
+        [status, id]
+    );
+
+    return result.rows[0];
+};
+
 const deleteBooking = async (id) => {
     const result = await pool.query(
         "DELETE FROM bookings WHERE id = $1 RETURNING *",
@@ -74,7 +103,9 @@ const deleteBooking = async (id) => {
 module.exports = {
     getAllBookings,
     getBookingById,
+    getBookingOwner,
     createBooking,
     updateBooking,
+    updateBookingStatus,
     deleteBooking
 };

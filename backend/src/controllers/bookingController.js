@@ -8,19 +8,16 @@ const {
     deleteBooking
 } = require("../services/bookingService");
 
-const getBookings = async (req, res) => {
+const getBookings = async (req, res, next) => {
     try {
         const bookings = await getAllBookings(req.user);
         res.json(bookings);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Internal Server Error"
-        });
+        next(error);
     }
 };
 
-const getBookingByIdController = async (req, res) => {
+const getBookingByIdController = async (req, res, next) => {
     try {
         const booking = await getBookingById(parseInt(req.params.id));
 
@@ -32,14 +29,11 @@ const getBookingByIdController = async (req, res) => {
 
         res.json(booking);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Internal Server Error"
-        });
+        next(error);
     }
 };
 
-const createBookingController = async (req, res) => {
+const createBookingController = async (req, res, next) => {
     try {
         const booking = await createBooking(req.body, req.user.id);
 
@@ -48,14 +42,11 @@ const createBookingController = async (req, res) => {
             booking
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Internal Server Error"
-        });
+        next(error);
     }
 };
 
-const updateBookingController = async (req, res) => {
+const updateBookingController = async (req, res, next) => {
     try {
         const owner = await getBookingOwner(
             parseInt(req.params.id)
@@ -92,14 +83,11 @@ const updateBookingController = async (req, res) => {
             booking
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Internal Server Error"
-        });
+        next(error);
     }
 };
 
-const updateBookingStatusController = async (req, res) => {
+const updateBookingStatusController = async (req, res, next) => {
     try {
         const { status } = req.body;
 
@@ -133,14 +121,11 @@ const updateBookingStatusController = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Internal Server Error"
-        });
+        next(error);
     }
 };
 
-const deleteBookingController = async (req, res) => {
+const deleteBookingController = async (req, res, next) => {
     try {
         const booking = await deleteBooking(parseInt(req.params.id));
 
@@ -155,10 +140,7 @@ const deleteBookingController = async (req, res) => {
             booking
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Internal Server Error"
-        });
+        next(error);
     }
 };
 

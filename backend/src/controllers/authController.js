@@ -2,7 +2,7 @@ const pool = require("../config/db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
     try {
         const { username, password } = req.body;
 
@@ -32,14 +32,11 @@ const register = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Internal Server Error"
-        });
+        next(error);
     }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
     try {
         const { username, password } = req.body;
 
@@ -83,10 +80,7 @@ const login = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Internal Server Error"
-        });
+        next(error);
     }
 };
 

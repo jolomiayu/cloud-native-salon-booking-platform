@@ -1,0 +1,29 @@
+Thank you for installing the Cloud-Native Salon Booking Platform!
+
+Release Name:
+{{ .Release.Name }}
+
+Namespace:
+{{ .Release.Namespace }}
+
+To check the deployment:
+
+kubectl get all
+
+To view the pods:
+
+kubectl get pods
+
+To view the services:
+
+kubectl get svc
+
+To view the ingress:
+
+kubectl get ingress
+
+To check the Helm release:
+
+helm status {{ .Release.Name }}
+
+Happy Learning!

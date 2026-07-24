@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: salon-booking-deployment
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: salon-booking
+
+  template:
+    metadata:
+      labels:
+        app: salon-booking
+
+    spec:
+      imagePullSecrets:
+        - name: ecr-secret
+      containers:
+      - name: salon-booking
+
+        image: 825765402564.dkr.ecr.eu-west-1.amazonaws.com/cloud-native-salon-booking-platform-backend:v3
+
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+  
+        env:
+          - name: DB_HOST
+            valueFrom:
+               configMapKeyRef:
+                 name: backend-config
+                 key: DB_HOST
+
+          - name: DB_NAME
+            valueFrom:
+               configMapKeyRef:
+                 name: backend-config
+                 key: DB_NAME
+
+          - name: DB_PORT
+            valueFrom:
+               configMapKeyRef:
+                 name: backend-config
+                 key: DB_PORT
+
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: backend-secret
+                key: DB_USER
+
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: backend-secret
+                key: DB_PASSWORD
+
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: backend-secret
+                key: JWT_SECRET
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5

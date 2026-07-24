@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: {{ include "salon-booking-chart.fullname" .}}-frontend
+
+spec:
+  type: {{ .Values.frontend.service.type }}
+
+  selector:
+    app: salon-frontend
+
+  ports:
+    - port: {{ .Values.frontend.service.port}}
+      targetPort: {{ .Values.frontend.container.port }}

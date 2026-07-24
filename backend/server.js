@@ -31,6 +31,14 @@ app.use("/api/bookings", bookingRoutes);
 
 app.use(errorHandler);
 
+app.get("/health", (req, res) => {
+    res.status(200).json({
+      status: "healthy",
+      service: "Cloud Native Salon Booking Platform Backend",
+      timestamp: new Date().toISOString()
+    });
+  });
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

@@ -26,3 +26,7 @@ jobs:
       - name: Build backend Docker image
         run: |
           docker build -t salon-backend:latest ./backend
+
+      - name: Build frontend Docker image
+        run: |
+          docker build -t salon-frontend:latest ./frontend

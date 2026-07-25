@@ -17,3 +17,8 @@ jobs:
         run: |
           pwd
           ls -la
+
+      - name: Display tool versions
+        run: |
+          git --version
+          docker --version

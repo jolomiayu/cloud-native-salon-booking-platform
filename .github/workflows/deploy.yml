@@ -22,3 +22,7 @@ jobs:
         run: |
           git --version
           docker --version
+
+      - name: Build backend Docker image
+        run: |
+          docker build -t salon-backend:latest ./backend

@@ -64,9 +64,11 @@ jobs:
       - name: Setup Helm
         uses: azure/setup-helm@v4
 
+      
+        
       - name: Deploy application with Helm
-         run: |
-          helm version
-          helm upgrade --install salon-booking ./salon-booking-chart \
-           --set image.tag=latest \
-           --set frontend.image.tag=latest
+        run: |
+           helm version
+           helm upgrade --install salon-booking ./salon-booking-chart \
+              --set image.tag=latest \
+              --set frontend.image.tag=latest

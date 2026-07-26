@@ -80,5 +80,5 @@ jobs:
             git pull origin main
 
             helm upgrade --install salon-booking ./salon-booking-chart \
-               --set image.tag=${IMAGE_TAG} \
-               --set frontend.image.tag=${IMAGE_TAG}
+              --set image.tag=${{ env.IMAGE_TAG }} \
+              --set frontend.image.tag=${{ env.IMAGE_TAG }}

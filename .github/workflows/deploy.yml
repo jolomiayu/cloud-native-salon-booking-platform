@@ -60,3 +60,13 @@ jobs:
       - name: Push frontend image
         run: |
           docker push 825765402564.dkr.ecr.eu-west-1.amazonaws.com/cloud-native-salon-booking-platform-frontend:latest
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Deploy application with Helm
+         run: |
+          helm version
+          helm upgrade --install salon-booking ./salon-booking-chart \
+           --set image.tag=latest \
+           --set frontend.image.tag=latest

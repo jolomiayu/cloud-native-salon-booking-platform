@@ -23,6 +23,9 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Set image tag
+        run: echo "IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -39,27 +42,27 @@ jobs:
 
       - name: Build backend Docker image
         run: |
-          docker build -t salon-backend:latest ./backend
+          docker build -t salon-backend:${IMAGE_TAG} ./backend
 
       - name: Build frontend Docker image
         run: |
-          docker build -t salon-frontend:latest ./frontend
+          docker build -t salon-frontend:${IMAGE_TAG} ./frontend
 
       - name: Tag backend image
         run: |
-          docker tag salon-backend:latest 825765402564.dkr.ecr.eu-west-1.amazonaws.com/cloud-native-salon-booking-platform-backend:latest
+          docker tag salon-backend:${IMAGE_TAG} 825765402564.dkr.ecr.eu-west-1.amazonaws.com/cloud-native-salon-booking-platform-backend:${IMAGE_TAG}
 
       - name: Tag frontend image
         run: |
-          docker tag salon-frontend:latest 825765402564.dkr.ecr.eu-west-1.amazonaws.com/cloud-native-salon-booking-platform-frontend:latest
+          docker tag salon-frontend:${IMAGE_TAG} 825765402564.dkr.ecr.eu-west-1.amazonaws.com/cloud-native-salon-booking-platform-frontend:${IMAGE_TAG}
 
       - name: Push backend image
         run: |
-          docker push 825765402564.dkr.ecr.eu-west-1.amazonaws.com/cloud-native-salon-booking-platform-backend:latest
+          docker push 825765402564.dkr.ecr.eu-west-1.amazonaws.com/cloud-native-salon-booking-platform-backend:${IMAGE_TAG}
 
       - name: Push frontend image
         run: |
-          docker push 825765402564.dkr.ecr.eu-west-1.amazonaws.com/cloud-native-salon-booking-platform-frontend:latest
+          docker push 825765402564.dkr.ecr.eu-west-1.amazonaws.com/cloud-native-salon-booking-platform-frontend:${IMAGE_TAG}
 
       - name: Setup Helm
         uses: azure/setup-helm@v4
@@ -77,5 +80,5 @@ jobs:
             git pull origin main
 
             helm upgrade --install salon-booking ./salon-booking-chart \
-               --set image.tag=latest \
-               --set frontend.image.tag=latest
+               --set image.tag=${IMAGE_TAG} \
+               --set frontend.image.tag=${IMAGE_TAG}

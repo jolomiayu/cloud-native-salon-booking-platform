@@ -72,7 +72,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
 
           script: |
-            cd ${{ secrets.EC2_PATH }}
+            cd /home/ubuntu/cloud-native-salon-booking-platform
 
             git pull origin main
 

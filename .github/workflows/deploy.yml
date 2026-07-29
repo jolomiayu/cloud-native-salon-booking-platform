@@ -70,7 +70,9 @@ jobs:
 
             git pull origin main
 
-            helm upgrade --install salon-booking ./salon-booking-chart \
+            set -e
+
+            helm upgrade --install salon-app ./salon-booking-chart \
               --set image.tag=${{ env.IMAGE_TAG }} \
               --set frontend.image.tag=${{ env.IMAGE_TAG }}
 
@@ -78,7 +80,7 @@ jobs:
               echo "Deployment failed!"
               echo "Rolling back to previous release..."
 
-              helm rollback salon-booking
+              helm rollback salon-app
 
               echo "Rollback completed."
 

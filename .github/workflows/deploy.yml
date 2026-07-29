@@ -30,15 +30,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Display repository contents
-        run: |
-          pwd
-          ls -la
-
-      - name: Display tool versions
-        run: |
-          git --version
-          docker --version
 
       - name: Build backend Docker image
         run: |
@@ -82,3 +73,16 @@ jobs:
             helm upgrade --install salon-booking ./salon-booking-chart \
               --set image.tag=${{ env.IMAGE_TAG }} \
               --set frontend.image.tag=${{ env.IMAGE_TAG }}
+
+            if ! kubectl rollout status deployment/salon-booking --timeout=180s; then
+              echo "Deployment failed!"
+              echo "Rolling back to previous release..."
+
+              helm rollback salon-booking
+
+              echo "Rollback completed."
+
+              exit 1
+            fi
+
+            echo "Deployment completed successfully!"

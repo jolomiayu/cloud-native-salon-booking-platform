@@ -5,6 +5,6 @@ metadata:
   name: backend-config
 
 data:
-  DB_HOST: postgres
+  DB_HOST: salon-booking-db.cnqks66gk1prm.eu-west-1.rds.amazonaws.com
   DB_NAME: salon_booking
   DB_PORT: "5432"

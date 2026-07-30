@@ -76,14 +76,9 @@ jobs:
               --set image.tag=${{ env.IMAGE_TAG }} \
               --set frontend.image.tag=${{ env.IMAGE_TAG }}
 
-            if ! kubectl rollout status deployment/salon-booking --timeout=180s; then
+            if ! kubectl rollout status deployment/salon-booking --timeout=180s || ! kubectl rollout status deployment/salon-booking-frontend --timeout=180s; then
               echo "Deployment failed!"
-              echo "Rolling back to previous release..."
-
               helm rollback salon-app
-
-              echo "Rollback completed."
-
               exit 1
             fi
 

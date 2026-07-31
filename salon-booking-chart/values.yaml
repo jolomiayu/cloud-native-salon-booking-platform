@@ -181,7 +181,7 @@ config:
 
 secret:
   dbUser: salon_user
-  dbPassword: SalonPass123!
+  dbPassword: <your RDS master password>
   jwtSecret: MySuperSecretJWTKey2026!
 
 nodeSelector: {}

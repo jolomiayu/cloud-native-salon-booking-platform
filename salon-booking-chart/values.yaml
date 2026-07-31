@@ -180,7 +180,7 @@ config:
   dbPort: "5432"
 
 secret:
-  dbUser: salon_user
+  dbUser: postgres
   dbPassword: <your RDS master password>
   jwtSecret: MySuperSecretJWTKey2026!
 

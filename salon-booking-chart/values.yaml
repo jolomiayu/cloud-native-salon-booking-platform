@@ -181,7 +181,7 @@ config:
 
 secret:
   dbUser: postgres
-  dbPassword: <your RDS master password>
+  dbPassword: MyStrongPassword123!
   jwtSecret: MySuperSecretJWTKey2026!
 
 nodeSelector: {}

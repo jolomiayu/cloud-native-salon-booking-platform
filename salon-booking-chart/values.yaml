@@ -175,7 +175,7 @@ volumeMounts: []
 #   readOnly: true
 
 config:
-  dbHost: postgres
+  dbHost: salon-booking-db.cnqks66gk1pm.eu-west-1.rds.amazonaws.com
   dbName: salon_booking
   dbPort: "5432"
 
@@ -195,7 +195,7 @@ frontend:
 
   image:
     repository: 825765402564.dkr.ecr.eu-west-1.amazonaws.com/cloud-native-salon-booking-platform-frontend
-    tag: v2
+    tag: ""
 
   service:
     type: ClusterIP

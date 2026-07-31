@@ -71,16 +71,17 @@ jobs:
             git pull origin main
 
             set -e
+
             echo "Deploying image tag: ${{ env.IMAGE_TAG }}"
 
             helm upgrade --install salon-app ./salon-booking-chart \
-              --set image.tag="${{ env.IMAGE_TAG }}" \
-              --set frontend.image.tag="${{ env.IMAGE_TAG }}"
+               --set image.tag="${{ env.IMAGE_TAG }}" \
+               --set frontend.image.tag="${{ env.IMAGE_TAG }}"
 
-            if ! kubectl rollout status deployment/salon-booking --timeout=180s || ! kubectl rollout status deployment/salon-booking-frontend --timeout=180s; then
-              echo "Deployment failed!"
-              helm rollback salon-app
-              exit 1
-            fi
+            echo "Waiting 20 seconds for Kubernetes to reconcile..."
+            sleep 20
+
+            kubectl rollout status deployment/salon-booking --timeout=180s
+            kubectl rollout status deployment/salon-booking-frontend --timeout=180s
 
             echo "Deployment completed successfully!"

@@ -181,7 +181,7 @@ config:
 
 secret:
   dbUser: postgres
-  dbPassword: MyStrongPassword123!
+  dbPassword: Ayiri847
   jwtSecret: MySuperSecretJWTKey2026!
 
 nodeSelector: {}
